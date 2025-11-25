@@ -1,31 +1,31 @@
 import allure
+from selenium.webdriver.common.by import By
 from pages.main_page import MainPage
-from selenium.webdriver.support.wait import WebDriverWait
-
-BASE_URL = "https://qa-scooter.praktikum-services.ru/"
-
-
-@allure.feature("Переходы по логотипам")
-@allure.story("Редиректы с главной страницы")
-@allure.title("Переход по лого 'Самокат' → главная страница")
-def test_scooter_logo_redirects_to_main_page(driver):
-    main_page = MainPage(driver)
-
-    main_page.open_main_page(BASE_URL)
-    main_page.click_logo_scooter()
-
-    assert driver.current_url == BASE_URL
+from data.order_data import BASE_URL
+from locators.main_page_locators import MainPageLocators
 
 
 @allure.feature("Переходы по логотипам")
 @allure.story("Редиректы с главной страницы")
-@allure.title("Переход по лого 'Яндекс' → Дзен (новая вкладка)")
-def test_yandex_logo_opens_dzen(driver):
-    main_page = MainPage(driver)
+class TestLogoLinks:
 
-    main_page.open_main_page(BASE_URL)
-    main_page.click_logo_yandex()
+    @allure.title("Переход по лого 'Самокат' → главная страница")
+    def test_scooter_logo_redirects_to_main_page(self, driver):
+        main_page = MainPage(driver)
 
-    WebDriverWait(driver, 10).until(lambda d: len(d.window_handles) > 1)
+        main_page.open_main_page(BASE_URL)
+        main_page.click_logo_scooter()
 
-    assert len(driver.window_handles) == 2
+        assert main_page.get_current_url() == BASE_URL
+
+
+    @allure.title("Переход по лого 'Яндекс' → Дзен (новая вкладка)")
+    def test_yandex_logo_opens_dzen(self, driver):
+        main_page = MainPage(driver)
+
+        main_page.open_main_page(BASE_URL)
+        main_page.click_logo_yandex()
+
+        main_page.switch_to_new_tab()
+
+        assert main_page.element_exists(MainPageLocators.DZEN_META)

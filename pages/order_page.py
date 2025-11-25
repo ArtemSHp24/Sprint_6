@@ -60,9 +60,8 @@ class OrderPage(BasePage):
 
     @allure.step("Нажимаю кнопку Заказать")
     def click_order_button(self):
-        element = self.wait_for_visible(OrderPageLocators.ORDER_SUBMIT_BUTTON)
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
-        self.driver.execute_script("arguments[0].click();", element)
+        self.scroll_to(OrderPageLocators.ORDER_SUBMIT_BUTTON)
+        self.js_click(OrderPageLocators.ORDER_SUBMIT_BUTTON)
 
     @allure.step("Проверяю, что модальное окно заказа отображается")
     def is_order_modal_visible(self):
